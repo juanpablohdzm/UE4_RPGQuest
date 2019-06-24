@@ -4,6 +4,7 @@
 #include "RPGPlayerController.h"
 #include <Kismet/GameplayStatics.h>
 #include <Camera/PlayerCameraManager.h>
+#include "RPGCharacter.h"
 
 void ARPGPlayerController::SetupInputComponent()
 {
@@ -13,6 +14,8 @@ void ARPGPlayerController::SetupInputComponent()
 	InputComponent->BindAxis("Rotate",this, &ARPGPlayerController::AddYawInput);
 	InputComponent->BindAxis("MoveForward",this, &ARPGPlayerController::MoveForward);
 	InputComponent->BindAxis("MoveRight",this, &ARPGPlayerController::MoveRight);
+
+	InputComponent->BindAction("Jump",EInputEvent::IE_Pressed,this, &ARPGPlayerController::Jump);
 }
 
 void ARPGPlayerController::MoveForward(float value)
@@ -40,5 +43,14 @@ void ARPGPlayerController::MoveRight(float value)
 		else
 			pawn->AddMovementInput(pawn->GetActorRightVector() * value);
 
+	}
+}
+
+void ARPGPlayerController::Jump()
+{
+	ARPGCharacter* character = Cast<ARPGCharacter>(GetPawn());
+	if (character)
+	{
+		character->Jump();
 	}
 }

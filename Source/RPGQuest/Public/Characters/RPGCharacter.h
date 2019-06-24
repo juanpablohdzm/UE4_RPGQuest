@@ -19,6 +19,12 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "RPGCharacter")
+		class UCameraComponent* Camera;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "RPGCharacter")
+		class USpringArmComponent* SpringArm;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

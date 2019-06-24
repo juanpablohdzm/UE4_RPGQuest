@@ -22,4 +22,6 @@ protected:
 
 	void MoveRight(float value);
 
+	void Jump();
+
 };
