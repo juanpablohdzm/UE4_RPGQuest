@@ -3,11 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include <GameplayAbilities/Public/AbilitySystemInterface.h>
 #include "GameFramework/Character.h"
 #include "RPGCharacter.generated.h"
 
+class UAbilitySystemComponent;
+
 UCLASS()
-class RPGQUEST_API ARPGCharacter : public ACharacter
+class RPGQUEST_API ARPGCharacter : public ACharacter,public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
@@ -19,10 +22,13 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "RPGCharacter")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+		UAbilitySystemComponent* AbilitySystemComp;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 		class UCameraComponent* Camera;
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "RPGCharacter")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 		class USpringArmComponent* SpringArm;
 
 public:	
@@ -31,5 +37,8 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
 };
