@@ -22,13 +22,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	class UCapsuleComponent* GetWeaponCapsule() const { return WeaponCapsule; }
 
-
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
 
-	virtual void PostInitializeComponents() override; 
-
+	/*Components*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 		UAbilitySystemComponent* AbilitySystemComp;
 
@@ -37,12 +33,20 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 		class UCameraComponent* Camera;
-	
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 		class USpringArmComponent* SpringArm;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 		class UCapsuleComponent* WeaponCapsule;
+
+
+protected:
+
+	/*Functions*/
+	virtual void BeginPlay() override;
+
+	virtual void PostInitializeComponents() override; 
 
 	UFUNCTION()
 		void OnHealthChange(float Value, float MaxValue);
@@ -55,7 +59,6 @@ protected:
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "AttributeDelegatesChange")
 		void K2_OnManaChange(float Value, float MaxValue);
-
 
 public:	
 	// Called every frame

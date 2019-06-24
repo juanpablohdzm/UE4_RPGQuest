@@ -7,8 +7,8 @@
 
 URPGAttributeSet::URPGAttributeSet()
 {
-	Health = 100.0f;
-	Mana = 100.0f;
+	MaxHealth = Health = 100.0f;
+	MaxMana = Mana = 100.0f;
 }
 
 void URPGAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data)
@@ -16,8 +16,7 @@ void URPGAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectMod
 	if (Data.EvaluatedData.Attribute.GetUProperty() == FindFieldChecked<UProperty>(URPGAttributeSet::StaticClass(), GET_MEMBER_NAME_CHECKED(URPGAttributeSet, Health)))
 	{
 		Health.SetCurrentValue(FMath::Clamp(Health.GetCurrentValue(), 0.0f, Health.GetBaseValue()));
-		OnHealthChange.Broadcast(Health.GetCurrentValue(), Health.GetBaseValue());
-		UE_LOG(LogTemp, Warning, TEXT("Current health: %d Max Health: %d"), Health.GetCurrentValue(), Health.GetBaseValue());
+		OnHealthChange.Broadcast(Health.GetCurrentValue(), MaxHealth.GetBaseValue());
 
 // 		ARPGCharacter* owner = Cast<ARPGCharacter>(GetOwningActor());
 // 		if (owner && Health.GetCurrentValue() == Health.GetBaseValue())
@@ -35,6 +34,6 @@ void URPGAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectMod
 	if (Data.EvaluatedData.Attribute.GetUProperty() == FindFieldChecked<UProperty>(URPGAttributeSet::StaticClass(), GET_MEMBER_NAME_CHECKED(URPGAttributeSet, Mana)))
 	{
 		Mana.SetCurrentValue(FMath::Clamp(Mana.GetCurrentValue(), 0.0f, Mana.GetBaseValue()));
-		OnManaChange.Broadcast(Mana.GetCurrentValue(), Mana.GetBaseValue());
+		OnManaChange.Broadcast(Mana.GetCurrentValue(), MaxMana.GetBaseValue());
 	}
 }
