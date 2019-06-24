@@ -19,18 +19,43 @@ public:
 	// Sets default values for this character's properties
 	ARPGCharacter();
 
+	UFUNCTION(BlueprintCallable)
+	class UCapsuleComponent* GetWeaponCapsule() const { return WeaponCapsule; }
+
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	virtual void PostInitializeComponents() override; 
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 		UAbilitySystemComponent* AbilitySystemComp;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+		class URPGAttributeSet* AttributeSetComp;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 		class UCameraComponent* Camera;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 		class USpringArmComponent* SpringArm;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+		class UCapsuleComponent* WeaponCapsule;
+
+	UFUNCTION()
+		void OnHealthChange(float Value, float MaxValue);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "AttributeDelegatesChange")
+		void K2_OnHealthChange(float Value, float MaxValue);
+
+	UFUNCTION()
+		void OnManaChange(float Value, float MaxValue);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "AttributeDelegatesChange")
+		void K2_OnManaChange(float Value, float MaxValue);
+
 
 public:	
 	// Called every frame

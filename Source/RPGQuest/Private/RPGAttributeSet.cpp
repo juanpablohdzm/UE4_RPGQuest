@@ -17,6 +17,7 @@ void URPGAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectMod
 	{
 		Health.SetCurrentValue(FMath::Clamp(Health.GetCurrentValue(), 0.0f, Health.GetBaseValue()));
 		OnHealthChange.Broadcast(Health.GetCurrentValue(), Health.GetBaseValue());
+		UE_LOG(LogTemp, Warning, TEXT("Current health: %d Max Health: %d"), Health.GetCurrentValue(), Health.GetBaseValue());
 
 // 		ARPGCharacter* owner = Cast<ARPGCharacter>(GetOwningActor());
 // 		if (owner && Health.GetCurrentValue() == Health.GetBaseValue())

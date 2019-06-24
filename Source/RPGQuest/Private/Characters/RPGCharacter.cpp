@@ -4,9 +4,11 @@
 #include "RPGCharacter.h"
 #include <GameFramework/SpringArmComponent.h>
 #include <Camera/CameraComponent.h>
+#include <Components/CapsuleComponent.h>
 #include <../Plugins/Runtime/GameplayAbilities/Source/GameplayAbilities/Public/AbilitySystemComponent.h>
 #include <../Plugins/Runtime/GameplayAbilities/Source/GameplayAbilities/Public/Abilities/GameplayAbility.h>
 #include <../Plugins/Runtime/GameplayAbilities/Source/GameplayAbilities/Public/GameplayAbilitySpec.h>
+#include "RPGAttributeSet.h"
 
 
 // Sets default values
@@ -16,6 +18,7 @@ ARPGCharacter::ARPGCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	AbilitySystemComp = CreateDefaultSubobject<UAbilitySystemComponent>(FName("AbilitySystemComp"));
+	AttributeSetComp = CreateDefaultSubobject<URPGAttributeSet>(FName("AttributeSet"));
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(FName("SpringArm"));
 	SpringArm->SetupAttachment(RootComponent);
@@ -25,6 +28,11 @@ ARPGCharacter::ARPGCharacter()
 	Camera = CreateDefaultSubobject<UCameraComponent>(FName("Camera"));
 	Camera->SetupAttachment(SpringArm);
 
+	WeaponCapsule = CreateDefaultSubobject<UCapsuleComponent>(FName("WeaponCollider"));
+
+	FAttachmentTransformRules AttachmentTransformRules(EAttachmentRule::SnapToTarget, true);
+	WeaponCapsule->AttachToComponent(GetMesh(), AttachmentTransformRules, FName(TEXT("weapon_r")));
+
 }
 
 // Called when the game starts or when spawned
@@ -32,6 +40,18 @@ void ARPGCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+}
+
+
+
+void ARPGCharacter::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+	if (AttributeSetComp)
+	{
+		AttributeSetComp->OnHealthChange.AddDynamic(this, &ARPGCharacter::OnHealthChange);
+		AttributeSetComp->OnManaChange.AddDynamic(this, &ARPGCharacter::OnManaChange);
+	}
 }
 
 // Called every frame
@@ -71,5 +91,15 @@ void ARPGCharacter::AquireAbilities(const TArray<TSubclassOf<UGameplayAbility>>&
 	{
 		AquireAbility(AbilityItem);		
 	}
+}
+
+void ARPGCharacter::OnHealthChange(float Value, float MaxValue)
+{
+	K2_OnHealthChange(Value, MaxValue);
+}
+
+void ARPGCharacter::OnManaChange(float Value, float MaxValue)
+{
+	K2_OnManaChange(Value, MaxValue);
 }
 
