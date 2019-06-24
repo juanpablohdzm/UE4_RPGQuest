@@ -5,6 +5,8 @@
 #include <GameFramework/SpringArmComponent.h>
 #include <Camera/CameraComponent.h>
 #include <../Plugins/Runtime/GameplayAbilities/Source/GameplayAbilities/Public/AbilitySystemComponent.h>
+#include <../Plugins/Runtime/GameplayAbilities/Source/GameplayAbilities/Public/Abilities/GameplayAbility.h>
+#include <../Plugins/Runtime/GameplayAbilities/Source/GameplayAbilities/Public/GameplayAbilitySpec.h>
 
 
 // Sets default values
@@ -49,5 +51,25 @@ void ARPGCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 UAbilitySystemComponent* ARPGCharacter::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComp;
+}
+
+void ARPGCharacter::AquireAbility(const TSubclassOf<UGameplayAbility>& AbilityToAquire)
+{
+	if (AbilitySystemComp)
+	{
+		if (HasAuthority() && AbilityToAquire)
+		{
+			AbilitySystemComp->GiveAbility(FGameplayAbilitySpec(AbilityToAquire, 1, 0));
+		}
+		AbilitySystemComp->InitAbilityActorInfo(this, this);
+	}
+}
+
+void ARPGCharacter::AquireAbilities(const TArray<TSubclassOf<UGameplayAbility>>& AbilitiesToAquire)
+{
+	for (const TSubclassOf<UGameplayAbility>& AbilityItem : AbilitiesToAquire)
+	{
+		AquireAbility(AbilityItem);		
+	}
 }
 

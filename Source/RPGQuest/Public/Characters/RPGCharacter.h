@@ -8,6 +8,7 @@
 #include "RPGCharacter.generated.h"
 
 class UAbilitySystemComponent;
+class UGameplayAbility;
 
 UCLASS()
 class RPGQUEST_API ARPGCharacter : public ACharacter,public IAbilitySystemInterface
@@ -40,5 +41,11 @@ public:
 
 
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+
+	UFUNCTION(BlueprintCallable, Category = "AbilitySystem")
+		virtual void AquireAbility(const TSubclassOf<UGameplayAbility>& AbilityToAquire);
+
+	UFUNCTION(BlueprintCallable, Category = "AbilitySystem")
+		virtual void AquireAbilities(const TArray<TSubclassOf<UGameplayAbility>>& AbilitiesToAquire);
 
 };
