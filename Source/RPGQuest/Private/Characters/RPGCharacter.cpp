@@ -17,6 +17,9 @@ ARPGCharacter::ARPGCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	FinalFOV = 45.0f;
+	bWantsToZoom = false;
+
 	AbilitySystemComp = CreateDefaultSubobject<UAbilitySystemComponent>(FName("AbilitySystemComp"));
 	AttributeSetComp = CreateDefaultSubobject<URPGAttributeSet>(FName("AttributeSet"));
 
@@ -37,7 +40,7 @@ ARPGCharacter::ARPGCharacter()
 void ARPGCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	OrginalFOV = Camera->FieldOfView;
 }
 
 
@@ -60,6 +63,12 @@ void ARPGCharacter::PostInitializeComponents()
 void ARPGCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (bWantsToZoom)
+		Camera->SetFieldOfView(FMath::Lerp(Camera->FieldOfView, FinalFOV, DeltaTime));
+	else		
+		Camera->SetFieldOfView(FMath::Lerp(Camera->FieldOfView, OrginalFOV, DeltaTime));
+
 
 }
 

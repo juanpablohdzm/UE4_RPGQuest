@@ -26,6 +26,12 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "IRPGAttributeSet")
 		URPGAttributeSet* GetAttributeSetComp() ;
 		virtual URPGAttributeSet* GetAttributeSetComp_Implementation() override { return AttributeSetComp; }
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "CharacterAbilities")
+		bool bWantsToZoom;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "CharacterAbilities")
+		float FinalFOV;
 	
 
 protected:
@@ -81,5 +87,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "AbilitySystem")
 		virtual void AquireAbilities(const TArray<TSubclassOf<UGameplayAbility>>& AbilitiesToAquire);
+
+private:
+	float OrginalFOV;
 
 };
