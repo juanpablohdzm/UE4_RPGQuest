@@ -20,6 +20,9 @@ ARPGCharacter::ARPGCharacter()
 	FinalFOV = 45.0f;
 	bWantsToZoom = false;
 
+	AngleToLaunchActor = 30.0f;
+	LaunchMagnitude = 2000.0f;
+
 	AbilitySystemComp = CreateDefaultSubobject<UAbilitySystemComponent>(FName("AbilitySystemComp"));
 	AttributeSetComp = CreateDefaultSubobject<URPGAttributeSet>(FName("AttributeSet"));
 
@@ -48,10 +51,21 @@ void ARPGCharacter::BeginPlay()
 void ARPGCharacter::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
-	FAttachmentTransformRules AttachmentTransformRules(EAttachmentRule::SnapToTarget, true);
-	WeaponCapsule->AttachToComponent(GetMesh(), AttachmentTransformRules, FName(TEXT("weapon_r")));
-	WeaponCapsule->SetRelativeLocation(FVector(-1.33f, -69.62f, 5.94));
-	WeaponCapsule->SetRelativeRotation(FQuat(FRotator(0.0f, 0.0f, 91.21f)));
+
+	if (WeaponCapsule)
+	{
+		FAttachmentTransformRules AttachmentTransformRules(EAttachmentRule::SnapToTarget, true);
+		WeaponCapsule->AttachToComponent(GetMesh(), AttachmentTransformRules, FName(TEXT("weapon_r")));
+		WeaponCapsule->SetRelativeLocation(FVector(-1.33f, -69.62f, 5.94));
+		WeaponCapsule->SetRelativeRotation(FQuat(FRotator(0.0f, 0.0f, 91.21f)));
+	}
+
+	UCapsuleComponent* CapsuleComp = GetCapsuleComponent();
+	if (CapsuleComp)
+	{
+		CapsuleComp->OnComponentBeginOverlap.AddDynamic(this, &ARPGCharacter::PushActor);
+	}
+
 	if (AttributeSetComp)
 	{
 		AttributeSetComp->OnHealthChange.AddDynamic(this, &ARPGCharacter::OnHealthChange);
@@ -112,5 +126,32 @@ void ARPGCharacter::OnHealthChange(float Value, float MaxValue)
 void ARPGCharacter::OnManaChange(float Value, float MaxValue)
 {
 	K2_OnManaChange(Value, MaxValue);
+}
+
+void ARPGCharacter::PushActor(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (OtherActor && OtherActor != this)
+	{
+		FVector Direction = OtherActor->GetActorLocation();
+		Direction.Normalize();
+
+		FVector RightDirectionAxis = FVector::CrossProduct(Direction, FVector::UpVector);
+		Direction.RotateAngleAxis(AngleToLaunchActor, RightDirectionAxis);
+
+
+		ACharacter* OtherCharacter = Cast<ACharacter>(OtherActor);
+		if (OtherCharacter)
+		{
+			OtherCharacter->LaunchCharacter(Direction * LaunchMagnitude, true, true);
+		}
+		else
+		{
+			if (OtherComp->IsSimulatingPhysics())
+			{
+				OtherComp->AddImpulse(Direction * LaunchMagnitude,NAME_None,true);
+			}
+		}
+
+	}
 }
 

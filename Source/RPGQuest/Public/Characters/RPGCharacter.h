@@ -21,17 +21,39 @@ public:
 	// Sets default values for this character's properties
 	ARPGCharacter();
 
+
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+	// Called to bind functionality to input
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	/*Get Functions*/
 	UFUNCTION(BlueprintCallable)
 	class UCapsuleComponent* GetWeaponCapsule() const { return WeaponCapsule; }
+
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "IRPGAttributeSet")
 		URPGAttributeSet* GetAttributeSetComp() ;
 		virtual URPGAttributeSet* GetAttributeSetComp_Implementation() override { return AttributeSetComp; }
 
+	/*Functions*/
+	UFUNCTION(BlueprintCallable, Category = "AbilitySystem")
+		virtual void AquireAbility(const TSubclassOf<UGameplayAbility>& AbilityToAquire);
+
+	UFUNCTION(BlueprintCallable, Category = "AbilitySystem")
+		virtual void AquireAbilities(const TArray<TSubclassOf<UGameplayAbility>>& AbilitiesToAquire);
+
+	/*Variables*/
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "CharacterAbilities")
 		bool bWantsToZoom;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "CharacterAbilities")
-		float FinalFOV;
+		float AngleToLaunchActor;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "CharacterAbilities")
+		float LaunchMagnitude;
 	
 
 protected:
@@ -52,8 +74,10 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 		class UCapsuleComponent* WeaponCapsule;
 
+	/*Variables*/
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "CharacterAbilities")
+		float FinalFOV;
 
-protected:
 
 	/*Functions*/
 	virtual void BeginPlay() override;
@@ -72,23 +96,13 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent, Category = "AttributeDelegatesChange")
 		void K2_OnManaChange(float Value, float MaxValue);
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-
-	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
-
-	UFUNCTION(BlueprintCallable, Category = "AbilitySystem")
-		virtual void AquireAbility(const TSubclassOf<UGameplayAbility>& AbilityToAquire);
-
-	UFUNCTION(BlueprintCallable, Category = "AbilitySystem")
-		virtual void AquireAbilities(const TArray<TSubclassOf<UGameplayAbility>>& AbilitiesToAquire);
-
 private:
+
+	/*Variables*/
 	float OrginalFOV;
+
+	/*Functions*/
+	UFUNCTION()
+		void PushActor(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 };
