@@ -18,17 +18,6 @@ void URPGAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectMod
 		Health.SetCurrentValue(FMath::Clamp(Health.GetCurrentValue(), 0.0f, Health.GetBaseValue()));
 		OnHealthChange.Broadcast(Health.GetCurrentValue(), MaxHealth.GetBaseValue());
 
-// 		ARPGCharacter* owner = Cast<ARPGCharacter>(GetOwningActor());
-// 		if (owner && Health.GetCurrentValue() == Health.GetBaseValue())
-// 		{
-// 			owner->AddGameplayTag(owner->FullHealthTag);
-// 		}
-// 		else
-// 		{
-// 			owner->RemoveGameplayTag(owner->FullHealthTag);
-// 
-// 		}
-
 	}
 
 	if (Data.EvaluatedData.Attribute.GetUProperty() == FindFieldChecked<UProperty>(URPGAttributeSet::StaticClass(), GET_MEMBER_NAME_CHECKED(URPGAttributeSet, Mana)))

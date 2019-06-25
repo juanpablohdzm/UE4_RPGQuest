@@ -5,13 +5,15 @@
 #include "CoreMinimal.h"
 #include <GameplayAbilities/Public/AbilitySystemInterface.h>
 #include "GameFramework/Character.h"
+#include "Interfaces/RPGAttributeSetInterface.h"
 #include "RPGCharacter.generated.h"
 
 class UAbilitySystemComponent;
 class UGameplayAbility;
+class URPGAttributeSet;
 
 UCLASS()
-class RPGQUEST_API ARPGCharacter : public ACharacter,public IAbilitySystemInterface
+class RPGQUEST_API ARPGCharacter : public ACharacter,public IAbilitySystemInterface, public IRPGAttributeSetInterface
 {
 	GENERATED_BODY()
 
@@ -21,6 +23,10 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	class UCapsuleComponent* GetWeaponCapsule() const { return WeaponCapsule; }
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "IRPGAttributeSet")
+		URPGAttributeSet* GetAttributeSetComp() ;
+		virtual URPGAttributeSet* GetAttributeSetComp_Implementation() override { return AttributeSetComp; }
+	
 
 protected:
 
