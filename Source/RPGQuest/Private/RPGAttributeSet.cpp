@@ -15,14 +15,14 @@ void URPGAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectMod
 {
 	if (Data.EvaluatedData.Attribute.GetUProperty() == FindFieldChecked<UProperty>(URPGAttributeSet::StaticClass(), GET_MEMBER_NAME_CHECKED(URPGAttributeSet, Health)))
 	{
-		Health.SetCurrentValue(FMath::Clamp(Health.GetCurrentValue(), 0.0f, Health.GetBaseValue()));
+		Health.SetCurrentValue(FMath::Clamp(Health.GetCurrentValue(), 0.0f, MaxHealth.GetBaseValue()));
 		OnHealthChange.Broadcast(Health.GetCurrentValue(), MaxHealth.GetBaseValue());
 
 	}
 
 	if (Data.EvaluatedData.Attribute.GetUProperty() == FindFieldChecked<UProperty>(URPGAttributeSet::StaticClass(), GET_MEMBER_NAME_CHECKED(URPGAttributeSet, Mana)))
 	{
-		Mana.SetCurrentValue(FMath::Clamp(Mana.GetCurrentValue(), 0.0f, Mana.GetBaseValue()));
+		Mana.SetCurrentValue(FMath::Clamp(Mana.GetCurrentValue(), 0.0f, MaxMana.GetBaseValue()));
 		OnManaChange.Broadcast(Mana.GetCurrentValue(), MaxMana.GetBaseValue());
 	}
 }

@@ -29,9 +29,7 @@ ARPGCharacter::ARPGCharacter()
 	Camera->SetupAttachment(SpringArm);
 
 	WeaponCapsule = CreateDefaultSubobject<UCapsuleComponent>(FName("WeaponCollider"));
-
-	FAttachmentTransformRules AttachmentTransformRules(EAttachmentRule::SnapToTarget, true);
-	WeaponCapsule->AttachToComponent(GetMesh(), AttachmentTransformRules, FName(TEXT("weapon_r")));
+	
 
 }
 
@@ -47,6 +45,10 @@ void ARPGCharacter::BeginPlay()
 void ARPGCharacter::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
+	FAttachmentTransformRules AttachmentTransformRules(EAttachmentRule::SnapToTarget, true);
+	WeaponCapsule->AttachToComponent(GetMesh(), AttachmentTransformRules, FName(TEXT("weapon_r")));
+	WeaponCapsule->SetRelativeLocation(FVector(-1.33f, -69.62f, 5.94));
+	WeaponCapsule->SetRelativeRotation(FQuat(FRotator(0.0f, 0.0f, 91.21f)));
 	if (AttributeSetComp)
 	{
 		AttributeSetComp->OnHealthChange.AddDynamic(this, &ARPGCharacter::OnHealthChange);

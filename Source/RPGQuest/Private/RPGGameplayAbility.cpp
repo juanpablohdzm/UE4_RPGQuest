@@ -32,13 +32,13 @@ FGameplayAbilityInfo URPGGameplayAbility::GetAbilityInfo()
 			//Get effect type
 			FGameplayAttribute CostAttr = EffectInfo.Attribute;
 			FString AttributeName = CostAttr.AttributeName;
-			if (AttributeName == "Health")
+			if (AttributeName == "HEALTH")
 			{
 				AbilityInfo.CostType = EAbilityCostType::HEALTH;
 			}
 			else
 			{
-				if (AttributeName == "Mana")
+				if (AttributeName == "MANA")
 				{
 					AbilityInfo.CostType = EAbilityCostType::MANA;
 				}
