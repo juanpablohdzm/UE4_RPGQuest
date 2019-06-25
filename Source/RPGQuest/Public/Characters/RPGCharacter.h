@@ -11,6 +11,8 @@
 class UAbilitySystemComponent;
 class UGameplayAbility;
 class URPGAttributeSet;
+class UPrimitiveComponent;
+class AActor;
 
 UCLASS()
 class RPGQUEST_API ARPGCharacter : public ACharacter,public IAbilitySystemInterface, public IRPGAttributeSetInterface
@@ -44,6 +46,10 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "AbilitySystem")
 		virtual void AquireAbilities(const TArray<TSubclassOf<UGameplayAbility>>& AbilitiesToAquire);
+
+	UFUNCTION(BlueprintCallable, Category = "CharacterAbilities")
+		void PushActor(UPrimitiveComponent* OtherComp, AActor* OtherActor, float AngleToLaunchActor = 30.0f, float LaunchMagnitude = 2000.0f);
+
 
 	/*Variables*/
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "CharacterAbilities")
@@ -102,7 +108,5 @@ private:
 	float OrginalFOV;
 
 	/*Functions*/
-	UFUNCTION()
-		void PushActor(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-
+	
 };

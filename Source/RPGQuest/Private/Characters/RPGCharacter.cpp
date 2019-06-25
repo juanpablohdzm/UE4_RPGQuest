@@ -9,6 +9,7 @@
 #include <../Plugins/Runtime/GameplayAbilities/Source/GameplayAbilities/Public/Abilities/GameplayAbility.h>
 #include <../Plugins/Runtime/GameplayAbilities/Source/GameplayAbilities/Public/GameplayAbilitySpec.h>
 #include "RPGAttributeSet.h"
+#include <Components/PrimitiveComponent.h>
 
 
 // Sets default values
@@ -58,12 +59,6 @@ void ARPGCharacter::PostInitializeComponents()
 		WeaponCapsule->AttachToComponent(GetMesh(), AttachmentTransformRules, FName(TEXT("weapon_r")));
 		WeaponCapsule->SetRelativeLocation(FVector(-1.33f, -69.62f, 5.94));
 		WeaponCapsule->SetRelativeRotation(FQuat(FRotator(0.0f, 0.0f, 91.21f)));
-	}
-
-	UCapsuleComponent* CapsuleComp = GetCapsuleComponent();
-	if (CapsuleComp)
-	{
-		CapsuleComp->OnComponentBeginOverlap.AddDynamic(this, &ARPGCharacter::PushActor);
 	}
 
 	if (AttributeSetComp)
@@ -128,15 +123,16 @@ void ARPGCharacter::OnManaChange(float Value, float MaxValue)
 	K2_OnManaChange(Value, MaxValue);
 }
 
-void ARPGCharacter::PushActor(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void ARPGCharacter::PushActor(UPrimitiveComponent* OtherComp, AActor* OtherActor, float AngleToLaunchActor /*= 30.0f*/, float LaunchMagnitude /*= 2000.0f*/)
 {
+
 	if (OtherActor && OtherActor != this)
 	{
-		FVector Direction = OtherActor->GetActorLocation();
+		FVector Direction = OtherActor->GetActorLocation()-GetActorLocation();
 		Direction.Normalize();
 
 		FVector RightDirectionAxis = FVector::CrossProduct(Direction, FVector::UpVector);
-		Direction.RotateAngleAxis(AngleToLaunchActor, RightDirectionAxis);
+		Direction = Direction.RotateAngleAxis(AngleToLaunchActor, RightDirectionAxis);
 
 
 		ACharacter* OtherCharacter = Cast<ACharacter>(OtherActor);
@@ -148,7 +144,7 @@ void ARPGCharacter::PushActor(UPrimitiveComponent* OverlappedComponent, AActor* 
 		{
 			if (OtherComp->IsSimulatingPhysics())
 			{
-				OtherComp->AddImpulse(Direction * LaunchMagnitude,NAME_None,true);
+				OtherComp->AddImpulse(Direction * LaunchMagnitude, NAME_None, true);
 			}
 		}
 
