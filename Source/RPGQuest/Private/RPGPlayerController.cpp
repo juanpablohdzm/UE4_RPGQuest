@@ -4,7 +4,7 @@
 #include "RPGPlayerController.h"
 #include <Kismet/GameplayStatics.h>
 #include <Camera/PlayerCameraManager.h>
-#include "RPGCharacter.h"
+#include "RPGPlayerCharacter.h"
 
 void ARPGPlayerController::SetupInputComponent()
 {
@@ -48,7 +48,7 @@ void ARPGPlayerController::MoveRight(float value)
 
 void ARPGPlayerController::Jump()
 {
-	ARPGCharacter* character = Cast<ARPGCharacter>(GetPawn());
+	ARPGPlayerCharacter* character = Cast<ARPGPlayerCharacter>(GetPawn());
 	if (character)
 	{
 		character->Jump();

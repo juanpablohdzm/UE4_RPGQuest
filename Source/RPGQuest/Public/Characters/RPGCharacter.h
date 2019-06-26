@@ -11,7 +11,6 @@
 class UAbilitySystemComponent;
 class UGameplayAbility;
 class URPGAttributeSet;
-class UPrimitiveComponent;
 class AActor;
 
 UCLASS()
@@ -31,13 +30,12 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	/*Get Functions*/
-	UFUNCTION(BlueprintCallable)
-	class UCapsuleComponent* GetWeaponCapsule() const { return WeaponCapsule; }
+	
 
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "IRPGAttributeSet")
-		URPGAttributeSet* GetAttributeSetComp() ;
+		URPGAttributeSet* GetAttributeSetComp();
 		virtual URPGAttributeSet* GetAttributeSetComp_Implementation() override { return AttributeSetComp; }
 
 	/*Functions*/
@@ -48,18 +46,7 @@ public:
 		virtual void AquireAbilities(const TArray<TSubclassOf<UGameplayAbility>>& AbilitiesToAquire);
 
 	UFUNCTION(BlueprintCallable, Category = "CharacterAbilities")
-		void PushActor(UPrimitiveComponent* OtherComp, AActor* OtherActor, float AngleToLaunchActor = 30.0f, float LaunchMagnitude = 2000.0f);
-
-
-	/*Variables*/
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "CharacterAbilities")
-		bool bWantsToZoom;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "CharacterAbilities")
-		float AngleToLaunchActor;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "CharacterAbilities")
-		float LaunchMagnitude;
+		void PushCharacter(AActor* OtherActor=nullptr, float AngleToLaunchActor = 30.0f, float LaunchMagnitude = 2000.0f);	
 	
 
 protected:
@@ -69,21 +56,7 @@ protected:
 		UAbilitySystemComponent* AbilitySystemComp;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
-		class URPGAttributeSet* AttributeSetComp;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
-		class UCameraComponent* Camera;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
-		class USpringArmComponent* SpringArm;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
-		class UCapsuleComponent* WeaponCapsule;
-
-	/*Variables*/
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "CharacterAbilities")
-		float FinalFOV;
-
+		class URPGAttributeSet* AttributeSetComp;	
 
 	/*Functions*/
 	virtual void BeginPlay() override;
@@ -101,12 +74,5 @@ protected:
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "AttributeDelegatesChange")
 		void K2_OnManaChange(float Value, float MaxValue);
-
-private:
-
-	/*Variables*/
-	float OrginalFOV;
-
-	/*Functions*/
 	
 };
