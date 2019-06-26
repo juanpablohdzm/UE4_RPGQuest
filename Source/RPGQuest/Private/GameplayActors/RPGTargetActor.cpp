@@ -14,6 +14,7 @@ ARPGTargetActor::ARPGTargetActor()
 	PrimaryActorTick.bCanEverTick = true;
 
 	Radius = 200.0f;
+	LastImpactPoint = FVector::ZeroVector;
 
 	RootComp = CreateDefaultSubobject<USceneComponent>(FName("RootComp"));
 	SetRootComponent(RootComp);
@@ -44,7 +45,7 @@ void ARPGTargetActor::ConfirmTargetingAndContinue()
 	QueryParams.AddIgnoredActor(MasterPC->GetPawn());
 
 	if (GetWorld()->OverlapMultiByChannel(OverlapResult, GetActorLocation(), 
-		FQuat::Identity, ECC_Visibility, 
+		FQuat::Identity, ECC_Pawn, 
 		FCollisionShape::MakeSphere(Radius), QueryParams))
 	{
 		for (size_t i = 0; i < OverlapResult.Num(); i++)
@@ -88,8 +89,8 @@ FVector ARPGTargetActor::GetTargetLocation()
 	FHitResult HitResult; 
 	if (GetWorld()->LineTraceSingleByChannel(HitResult, OwnerPosition, OwnerPosition + OwnerRotation.Vector() * 10000.0f, ECC_Visibility, QueryParams))
 	{
-		return HitResult.ImpactPoint;
+		LastImpactPoint = HitResult.ImpactPoint;
 	}
 
-	return FVector::ZeroVector;
+	return LastImpactPoint;
 }

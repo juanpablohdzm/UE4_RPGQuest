@@ -17,6 +17,8 @@ class RPGQUEST_API ARPGTargetActor : public AGameplayAbilityTargetActor
 private:
 	FVector GetTargetLocation();
 
+	FVector LastImpactPoint;
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "GameplayAbility Actor")
 		class USceneComponent* RootComp;
