@@ -1,0 +1,1 @@
+When download, before you open add "Paragon: Kwang" and "FX Variety Pack" package to the content
