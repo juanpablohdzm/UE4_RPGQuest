@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include <Materials/MaterialInstance.h>
 #include "RPGGameplayAbilityInfo.generated.h"
 
 
@@ -24,6 +25,9 @@ struct FGameplayAbilityInfo
 
 public:
 	FGameplayAbilityInfo();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AbilityInfo")
+		UMaterialInstance* Material;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AbilityInfo")
 		float CooldownDuration;

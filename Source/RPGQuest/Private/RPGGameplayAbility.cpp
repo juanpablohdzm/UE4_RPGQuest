@@ -49,6 +49,7 @@ FGameplayAbilityInfo URPGGameplayAbility::GetAbilityInfo()
 			}
 		}
 	}
+	AbilityInfo.Material = Material;
 	AbilityInfo.AbilityClass = GetClass();
 
 	return AbilityInfo;

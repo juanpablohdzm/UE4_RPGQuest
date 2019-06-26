@@ -15,6 +15,9 @@ class RPGQUEST_API URPGGameplayAbility : public UGameplayAbility
 {
 	GENERATED_BODY()
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ability Info")
+		class UMaterialInstance* Material;
+
 	UFUNCTION(BlueprintCallable)
 		virtual FGameplayAbilityInfo GetAbilityInfo();
 };

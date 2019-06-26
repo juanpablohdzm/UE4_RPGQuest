@@ -10,4 +10,5 @@ FGameplayAbilityInfo::FGameplayAbilityInfo()
 	Cost = 0.0f;
 	CostType = EAbilityCostType::NONE;
 	AbilityClass = nullptr;
+	Material = nullptr;
 }
