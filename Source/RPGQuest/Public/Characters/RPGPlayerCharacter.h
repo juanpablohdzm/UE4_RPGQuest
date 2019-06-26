@@ -20,6 +20,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	virtual void AquireAbility(const TSubclassOf<class UGameplayAbility>& AbilityToAquire) override;
+
 	UFUNCTION(BlueprintCallable)
 		class UCapsuleComponent* GetWeaponCapsule() const { return WeaponCapsule; }
 

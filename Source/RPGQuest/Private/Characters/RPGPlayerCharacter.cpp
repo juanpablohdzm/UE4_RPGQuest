@@ -6,6 +6,9 @@
 #include <Camera/CameraComponent.h>
 #include <Components/CapsuleComponent.h>
 #include <GameFramework/Character.h>
+#include "RPGPlayerController.h"
+#include "RPGGameplayAbility.h"
+#include <GameplayAbility.h>
 
 ARPGPlayerCharacter::ARPGPlayerCharacter()
 {
@@ -43,6 +46,25 @@ void ARPGPlayerCharacter::Tick(float DeltaTime)
 }
 
 
+
+void ARPGPlayerCharacter::AquireAbility(const TSubclassOf<UGameplayAbility>& AbilityToAquire)
+{
+	Super::AquireAbility(AbilityToAquire);
+
+	if (AbilityToAquire->IsChildOf(URPGGameplayAbility::StaticClass()))
+	{		
+		ARPGPlayerController* PC = Cast<ARPGPlayerController>(GetController());
+		if (PC)
+		{
+			URPGGameplayAbility* AbilityInstance = AbilityToAquire.Get()->GetDefaultObject<URPGGameplayAbility>();
+			if (AbilityInstance)
+			{
+				FGameplayAbilityInfo AbilityInfo = AbilityInstance->GetAbilityInfo();
+				PC->SetupUI(AbilityInfo);
+			}
+		}		
+	}
+}
 
 void ARPGPlayerCharacter::PostInitializeComponents()
 {
