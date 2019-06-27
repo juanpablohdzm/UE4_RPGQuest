@@ -13,5 +13,22 @@ UCLASS()
 class RPGQUEST_API ARPGEnemyCharacter : public ARPGCharacter
 {
 	GENERATED_BODY()
+
+public:
+	ARPGEnemyCharacter();
+
+	virtual void PostInitializeComponents() override; 
+
+protected:
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "EnemyBehavior")
+		class UPawnSensingComponent* SightComp;
+
+
+	UFUNCTION()
+		void OnPawnSeen(APawn* Pawn);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "EnemyBehavior")
+		void K2_OnPawnSeen(APawn* Pawn);
 	
 };
