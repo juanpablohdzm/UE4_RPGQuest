@@ -118,8 +118,8 @@ void ARPGCharacter::OnHealthChange(float Value, float MaxValue)
 	if (Value <= 0 && !IsDead)
 	{
 		IsDead = true;
-		DetachFromControllerPendingDestroy();
 		K2_OnHealthChange(Value, MaxValue);
+		DetachFromControllerPendingDestroy();
 	}
 	if (!IsDead)
 	{
