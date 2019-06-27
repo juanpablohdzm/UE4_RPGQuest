@@ -3,6 +3,8 @@
 
 #include "RPGEnemyCharacter.h"
 #include <Perception/PawnSensingComponent.h>
+#include "RPGAIController.h"
+#include <BrainComponent.h>
 
 
 
@@ -18,6 +20,25 @@ void ARPGEnemyCharacter::PostInitializeComponents()
 	if (SightComp)
 	{
 		SightComp->OnSeePawn.AddDynamic(this, &ARPGEnemyCharacter::OnPawnSeen);
+	}
+}
+
+void ARPGEnemyCharacter::DisableController()
+{
+	ARPGAIController* AIC = Cast<ARPGAIController>(GetController());
+	if (AIC)
+	{
+		AIC->GetBrainComponent()->StopLogic("Stop");
+	}
+
+}
+
+void ARPGEnemyCharacter::EnableController()
+{
+	ARPGAIController* AIC = Cast<ARPGAIController>(GetController());
+	if (AIC)
+	{
+		AIC->GetBrainComponent()->RestartLogic();
 	}
 }
 

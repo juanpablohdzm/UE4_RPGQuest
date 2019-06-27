@@ -29,6 +29,10 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "CharacterAbilities")
 		bool bWantsToZoom;
 
+	virtual void EnableController() override;
+
+	virtual void DisableController() override;
+
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")

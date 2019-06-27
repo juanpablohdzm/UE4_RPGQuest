@@ -30,7 +30,8 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	/*Get Functions*/
-	
+	UFUNCTION(BlueprintCallable, Category = "RPG Character")
+		bool GetIsDead() const { return IsDead; }
 
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
@@ -48,6 +49,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "CharacterAbilities")
 		void PushCharacter(AActor* OtherActor=nullptr, float AngleToLaunchActor = 30.0f, float LaunchMagnitude = 2000.0f);	
 	
+	UFUNCTION(BlueprintCallable, Category = "RPGCharacter")
+		virtual void DisableController();
+
+	UFUNCTION(BlueprintCallable, Category = "RPGCharacter")
+		virtual void EnableController();
 
 protected:
 
@@ -74,5 +80,9 @@ protected:
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "AttributeDelegatesChange")
 		void K2_OnManaChange(float Value, float MaxValue);
+
+	/*Variables*/
+	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite, Category = "RPG Character")
+	bool IsDead;
 	
 };

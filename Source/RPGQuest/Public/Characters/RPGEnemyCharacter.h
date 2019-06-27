@@ -19,6 +19,10 @@ public:
 
 	virtual void PostInitializeComponents() override; 
 
+	virtual void DisableController() override;
+
+	virtual void EnableController() override; 
+
 protected:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "EnemyBehavior")

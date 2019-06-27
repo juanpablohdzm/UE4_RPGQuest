@@ -66,6 +66,24 @@ void ARPGPlayerCharacter::AquireAbility(const TSubclassOf<UGameplayAbility>& Abi
 	}
 }
 
+void ARPGPlayerCharacter::EnableController()
+{
+	ARPGPlayerController* PC = Cast<ARPGPlayerController>(GetController());
+	if (PC)
+	{
+		PC->EnableInput(PC);
+	}
+}
+
+void ARPGPlayerCharacter::DisableController()
+{
+	ARPGPlayerController* PC = Cast<ARPGPlayerController>(GetController());
+	if (PC)
+	{
+		PC->DisableInput(PC);
+	}
+}
+
 void ARPGPlayerCharacter::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();

@@ -17,6 +17,7 @@ ARPGCharacter::ARPGCharacter()
 	AbilitySystemComp = CreateDefaultSubobject<UAbilitySystemComponent>(FName("AbilitySystemComp"));
 	AttributeSetComp = CreateDefaultSubobject<URPGAttributeSet>(FName("AttributeSet"));
 
+	IsDead = false;
 
 
 
@@ -102,9 +103,29 @@ void ARPGCharacter::PushCharacter(AActor* OtherActor, float AngleToLaunchActor /
 	}
 }
 
+void ARPGCharacter::DisableController()
+{
+
+}
+
+void ARPGCharacter::EnableController()
+{
+
+}
+
 void ARPGCharacter::OnHealthChange(float Value, float MaxValue)
 {
-	K2_OnHealthChange(Value, MaxValue);
+	if (Value <= 0 && !IsDead)
+	{
+		IsDead = true;
+		DetachFromControllerPendingDestroy();
+		SetLifeSpan(3.0f);
+		K2_OnHealthChange(Value, MaxValue);
+	}
+	if (!IsDead)
+	{
+		K2_OnHealthChange(Value, MaxValue);
+	}
 }
 
 void ARPGCharacter::OnManaChange(float Value, float MaxValue)
