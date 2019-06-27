@@ -1,1 +1,1 @@
-When download, before you open add "Paragon: Kwang" and "FX Variety Pack" package to the content
+When download, before you open add "Paragon: Kwang", "FX Variety Pack", "InfinityBladeGrassLands" package to the content
