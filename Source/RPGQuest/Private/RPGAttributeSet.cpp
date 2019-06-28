@@ -26,3 +26,21 @@ void URPGAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectMod
 		OnManaChange.Broadcast(Mana.GetCurrentValue(), MaxMana.GetBaseValue());
 	}
 }
+
+void URPGAttributeSet::ChangeHealthAmount(float amount)
+{
+	Health.SetCurrentValue(amount);
+	Health.SetBaseValue(amount);
+
+	MaxHealth.SetCurrentValue(amount);
+	MaxHealth.SetBaseValue(amount);
+}
+
+void URPGAttributeSet::ChangeManaAmount(float amount)
+{
+	Mana.SetCurrentValue(amount);
+	Mana.SetBaseValue(amount);
+
+	MaxMana.SetCurrentValue(amount);
+	MaxMana.SetBaseValue(amount);
+}

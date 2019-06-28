@@ -35,5 +35,11 @@ public:
 
 	FOnAttributeChangeDelegate OnHealthChange;
 	FOnAttributeChangeDelegate OnManaChange;
+
+	UFUNCTION(BlueprintCallable, Category = "AttributeSetBase")
+	void ChangeHealthAmount(float amount);
+
+	UFUNCTION(BlueprintCallable, Category = "AttributeSetBase")
+	void ChangeManaAmount(float amount);
 	
 };
