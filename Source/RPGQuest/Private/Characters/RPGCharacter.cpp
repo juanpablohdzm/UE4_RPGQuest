@@ -84,11 +84,24 @@ void ARPGCharacter::AquireAbilities(const TArray<TSubclassOf<UGameplayAbility>>&
 	}
 }
 
-void ARPGCharacter::PushCharacter(AActor* OtherActor, float AngleToLaunchActor /*= 30.0f*/, float LaunchMagnitude /*= 2000.0f*/)
+void ARPGCharacter::PushCharacter(AActor* OtherActor, float AngleToLaunchActor /*= 30.0f*/, float LaunchMagnitude /*= 2000.0f*/, bool ShouldIgnoreZ /*= true*/)
 {
 	if (OtherActor && OtherActor != this)
 	{
-		FVector Direction = OtherActor->GetActorLocation() - GetActorLocation();
+		FVector Direction;
+		if (ShouldIgnoreZ)
+		{
+			FVector OtherActorLocation = OtherActor->GetActorLocation();
+			OtherActorLocation.Z = 0.0f;
+			FVector CurrentActorLocation = GetActorLocation();
+			CurrentActorLocation.Z = 0.0f;
+
+			Direction = OtherActorLocation - CurrentActorLocation;
+		}
+		else
+		{
+			Direction = OtherActor->GetActorLocation() - GetActorLocation();
+		}
 		Direction.Normalize();
 
 		FVector RightDirectionAxis = FVector::CrossProduct(Direction, FVector::UpVector);

@@ -47,7 +47,7 @@ public:
 		virtual void AquireAbilities(const TArray<TSubclassOf<UGameplayAbility>>& AbilitiesToAquire);
 
 	UFUNCTION(BlueprintCallable, Category = "CharacterAbilities")
-		void PushCharacter(AActor* OtherActor=nullptr, float AngleToLaunchActor = 30.0f, float LaunchMagnitude = 2000.0f);	
+		void PushCharacter(AActor* OtherActor=nullptr, float AngleToLaunchActor = 30.0f, float LaunchMagnitude = 2000.0f, bool ShouldIgnoreZ = true);	
 	
 	UFUNCTION(BlueprintCallable, Category = "RPGCharacter")
 		virtual void DisableController();
