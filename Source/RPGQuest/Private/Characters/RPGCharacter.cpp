@@ -40,6 +40,7 @@ void ARPGCharacter::PostInitializeComponents()
 	{
 		AttributeSetComp->OnHealthChange.AddDynamic(this, &ARPGCharacter::OnHealthChange);
 		AttributeSetComp->OnManaChange.AddDynamic(this, &ARPGCharacter::OnManaChange);
+		AttributeSetComp->OnStaminaChange.AddDynamic(this, &ARPGCharacter::OnStaminaChange);
 	}
 }
 
@@ -145,4 +146,8 @@ void ARPGCharacter::OnManaChange(float Value, float MaxValue)
 	K2_OnManaChange(Value, MaxValue);
 }
 
+void ARPGCharacter::OnStaminaChange(float Value, float MaxValue)
+{
+	K2_OnStaminaChange(Value, MaxValue);
+}
 

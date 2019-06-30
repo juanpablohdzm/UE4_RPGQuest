@@ -52,6 +52,8 @@ void ARPGFollowActor::StartTargeting(UGameplayAbility* Ability)
 
 void ARPGFollowActor::ConfirmTargetingAndContinue()
 {
+	UE_LOG(LogTemp, Warning, TEXT("Confirm"));
+
 	TArray<FOverlapResult> OverlapResult;
 	TArray<TWeakObjectPtr<AActor>> OverlapedActors;
 	FCollisionQueryParams QueryParams;

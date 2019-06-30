@@ -44,7 +44,14 @@ FGameplayAbilityInfo URPGGameplayAbility::GetAbilityInfo()
 				}
 				else
 				{
-					AbilityInfo.CostType = EAbilityCostType::NONE;					
+					if (AttributeName == "STAMINA")
+					{
+						AbilityInfo.CostType = EAbilityCostType::STAMINA;
+					}
+					else
+					{
+						AbilityInfo.CostType = EAbilityCostType::NONE;
+					}
 				}
 			}
 		}

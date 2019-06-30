@@ -15,7 +15,7 @@ class URPGGameplayAbility;
 UENUM(BlueprintType)
 enum class EAbilityCostType : uint8
 {
-	HEALTH, MANA, NONE
+	HEALTH, MANA, STAMINA, NONE
 };
 
 USTRUCT(BlueprintType)

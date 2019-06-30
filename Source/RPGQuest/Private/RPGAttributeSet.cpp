@@ -9,6 +9,8 @@ URPGAttributeSet::URPGAttributeSet()
 {
 	MaxHealth = Health = 100.0f;
 	MaxMana = Mana = 100.0f;
+	Stamina = 0.0f;
+	MaxStamina = 100.0f;
 }
 
 void URPGAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data)
@@ -24,6 +26,12 @@ void URPGAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectMod
 	{
 		Mana.SetCurrentValue(FMath::Clamp(Mana.GetCurrentValue(), 0.0f, MaxMana.GetBaseValue()));
 		OnManaChange.Broadcast(Mana.GetCurrentValue(), MaxMana.GetBaseValue());
+	}
+
+	if (Data.EvaluatedData.Attribute.GetUProperty() == FindFieldChecked<UProperty>(URPGAttributeSet::StaticClass(), GET_MEMBER_NAME_CHECKED(URPGAttributeSet, Stamina)))
+	{
+		Stamina.SetCurrentValue(FMath::Clamp(Stamina.GetCurrentValue(), 0.0f, MaxStamina.GetBaseValue()));
+		OnStaminaChange.Broadcast(Stamina.GetCurrentValue(), MaxStamina.GetBaseValue());
 	}
 }
 

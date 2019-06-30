@@ -81,6 +81,12 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent, Category = "AttributeDelegatesChange")
 		void K2_OnManaChange(float Value, float MaxValue);
 
+	UFUNCTION()
+		void OnStaminaChange(float Value, float MaxValue);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "AttributeDelegatesChange")
+		void K2_OnStaminaChange(float Value, float MaxValue);
+
 	/*Variables*/
 	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite, Category = "RPG Character")
 	bool IsDead;
