@@ -3,19 +3,28 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Abilities/GameplayAbilityTargetActor.h"
-#include "RPGTargetActor.generated.h"
+#include "GameplayActors/RPGTargetActor.h"
+#include "RPGFollowActor.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class RPGQUEST_API ARPGTargetActor : public AGameplayAbilityTargetActor
+class RPGQUEST_API ARPGFollowActor :public AGameplayAbilityTargetActor
 {
 	GENERATED_BODY()
 
+private:
+	FTimerHandle TimerHandle_StartActorLocation;
+	FTimerHandle TimerHandle_EndActorLocation;
+
+	AActor* OwningActor;
+
 protected:
-	virtual FVector GetTargetPosition();
+
+	virtual void BeginPlay() override; 
+
+	void GetTargetPosition();
 
 	FVector LastImpactPoint;
 
@@ -29,13 +38,17 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GameplayAbility Actor")
 		float Radius;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GameplayAbility Actor")
+		FVector LocationOffset;
+
 
 public:
-	ARPGTargetActor();
+	ARPGFollowActor();
 
-	void Tick(float DeltaSeconds) override; 
+	void Tick(float DeltaSeconds) override;
 
 	virtual void StartTargeting(UGameplayAbility* Ability) override;
-	virtual void ConfirmTargetingAndContinue() override; 
+	virtual void ConfirmTargetingAndContinue() override;
+
 	
 };

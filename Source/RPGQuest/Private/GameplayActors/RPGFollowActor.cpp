@@ -1,17 +1,18 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "RPGTargetActor.h"
+#include "RPGFollowActor.h"
+#include <Kismet/GameplayStatics.h>
+#include <TimerManager.h>
 #include <Components/DecalComponent.h>
 #include <GameplayAbility.h>
 #include <GameplayAbilityTargetActor.h>
-#include "RPGPlayerController.h"
+#include <DrawDebugHelpers.h>
 
-
-
-ARPGTargetActor::ARPGTargetActor()
+ARPGFollowActor::ARPGFollowActor()
 {
 	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bStartWithTickEnabled = true;
 
 	Radius = 200.0f;
 	LastImpactPoint = FVector::ZeroVector;
@@ -25,27 +26,39 @@ ARPGTargetActor::ARPGTargetActor()
 
 }
 
-void ARPGTargetActor::Tick(float DeltaSeconds)
+void ARPGFollowActor::BeginPlay()
+{
+	GetWorldTimerManager().SetTimer(TimerHandle_StartActorLocation,this, &ARPGFollowActor::GetTargetPosition,0.01f,true,0.0f);
+	FTimerDelegate StopTimer;
+	StopTimer.BindLambda([this]()
+		{
+			GetWorldTimerManager().ClearTimer(TimerHandle_StartActorLocation);
+		});
+
+	GetWorldTimerManager().SetTimer(TimerHandle_EndActorLocation, StopTimer, 5.0f, false);
+}
+
+void ARPGFollowActor::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-	SetActorLocation(GetTargetPosition());
+	SetActorLocation(LastImpactPoint);
 }
 
-void ARPGTargetActor::StartTargeting(UGameplayAbility* Ability)
+void ARPGFollowActor::StartTargeting(UGameplayAbility* Ability)
 {
 	Super::StartTargeting(Ability);
-	MasterPC = Cast<ARPGPlayerController>(Ability->GetOwningActorFromActorInfo()->GetInstigatorController());
+	OwningActor = Ability->GetOwningActorFromActorInfo();
 }
 
-void ARPGTargetActor::ConfirmTargetingAndContinue()
+void ARPGFollowActor::ConfirmTargetingAndContinue()
 {
 	TArray<FOverlapResult> OverlapResult;
 	TArray<TWeakObjectPtr<AActor>> OverlapedActors;
 	FCollisionQueryParams QueryParams;
-	QueryParams.AddIgnoredActor(MasterPC->GetPawn());
+	QueryParams.AddIgnoredActor(OwningActor);
 
-	if (GetWorld()->OverlapMultiByChannel(OverlapResult, GetActorLocation(), 
-		FQuat::Identity, ECC_Pawn, 
+	if (GetWorld()->OverlapMultiByChannel(OverlapResult, GetActorLocation(),
+		FQuat::Identity, ECC_Pawn,
 		FCollisionShape::MakeSphere(Radius), QueryParams))
 	{
 		for (size_t i = 0; i < OverlapResult.Num(); i++)
@@ -76,21 +89,14 @@ void ARPGTargetActor::ConfirmTargetingAndContinue()
 	}
 }
 
-FVector ARPGTargetActor::GetTargetPosition()
+void ARPGFollowActor::GetTargetPosition()
 {
-	FVector OwnerPosition; 
-	FRotator OwnerRotation;
-	MasterPC->GetPlayerViewPoint(OwnerPosition, OwnerRotation);
-
-	FCollisionQueryParams QueryParams;
-	QueryParams.bTraceComplex = true;
-	QueryParams.AddIgnoredActor(MasterPC->GetPawn());
-
-	FHitResult HitResult; 
-	if (GetWorld()->LineTraceSingleByChannel(HitResult, OwnerPosition, OwnerPosition + OwnerRotation.Vector() * 10000.0f, ECC_Visibility, QueryParams))
+	APawn* Pawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+	if (Pawn)
 	{
-		LastImpactPoint = HitResult.ImpactPoint;
+		LastImpactPoint = Pawn->GetActorLocation()+ LocationOffset;
 	}
-
-	return LastImpactPoint;
 }
+
+
+
