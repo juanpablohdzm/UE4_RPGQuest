@@ -52,3 +52,4 @@ void URPGAttributeSet::ChangeManaAmount(float amount)
 	MaxMana.SetCurrentValue(amount);
 	MaxMana.SetBaseValue(amount);
 }
+
